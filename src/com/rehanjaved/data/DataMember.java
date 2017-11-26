@@ -1,7 +1,6 @@
-package com.rehanjaved.database;
+package com.rehanjaved.data;
 
 import java.io.Serializable;
-import com.rehanjaved.crypto.Crypt;
 
 public class DataMember implements Serializable{
 
@@ -26,6 +25,7 @@ public class DataMember implements Serializable{
 		
 		if(!encrypted){
 			this.data = crypt.encrypt(data);
+			this.encrypted = true;
 		}
 		
 	}

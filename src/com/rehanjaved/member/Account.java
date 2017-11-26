@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class Account{
 
 	// Attributes..
+	private String title;
 	private String websiteName;
 	private Category category;
 	private String websiteLink;
@@ -15,12 +16,23 @@ public class Account{
 	private String phoneNumber;
 	private String additionalText;
 	private String comments;
-	private ArrayList<String> notes;
 	private ArrayList<String> files;
 	
 	/**
+	 * Constructor with title.
+	 * 
+	 * @param title
+	 */
+	public Account(String title) {
+	
+		this.title = title;
+	
+	}
+
+	/**
 	 * Constructors.
 	 * 
+	 * @param title
 	 * @param websiteName
 	 * @param category
 	 * @param websiteLink
@@ -30,12 +42,13 @@ public class Account{
 	 * @param phoneNumber
 	 * @param additionalText
 	 * @param comments
-	 * @param notes
+	 * @param files
 	 */
-	public Account(String websiteName, Category category, String websiteLink, String email, String username,
-			String password, String phoneNumber, String additionalText, String comments, ArrayList<String> notes,
+	public Account(String title, String websiteName, Category category, String websiteLink, String email, String username,
+			String password, String phoneNumber, String additionalText, String comments,
 			ArrayList<String> files) {
 		
+		this.title = title;
 		this.websiteName = websiteName;
 		this.category = category;
 		this.websiteLink = websiteLink;
@@ -46,17 +59,30 @@ public class Account{
 		this.additionalText = additionalText;
 		this.comments = comments;
 		
-		if(notes == null){
-			this.notes = new ArrayList<String>();
-		}else{
-			this.notes = notes;
-		}
-		
 		if(files == null){
 			this.files = new ArrayList<String>();
 		}else{
-			this.files = notes;
+			this.files = files;
 		}
+	
+	}
+
+	/**
+	 * @return title
+	 */
+	public String getTitle() {
+
+		return title;
+	
+	}
+
+	/**
+	 * Setting new value of title
+	 * @param title
+	 */
+	public void setTitle(String title) {
+
+		this.title = title;
 	
 	}
 
@@ -232,25 +258,6 @@ public class Account{
 	}
 
 	/**
-	 * @return notes
-	 */
-	public ArrayList<String> getNotes() {
-	
-		return notes;
-	
-	}
-
-	/**
-	 * Setting new value of notes
-	 * @param notes
-	 */
-	public void setNotes(ArrayList<String> notes) {
-	
-		this.notes = notes;
-	
-	}
-
-	/**
 	 * @return files
 	 */
 	public ArrayList<String> getFiles() {
@@ -275,10 +282,9 @@ public class Account{
 	@Override
 	public String toString() {
 		
-		return "Account >> Website Name: " + websiteName + "\nCategory: " + category + "\nLink: " + websiteLink
+		return "Account >>\nTitle: "+title+"\nWebsite Name: " + websiteName + "\nCategory: " + category + "\nLink: " + websiteLink
 				+ "\nEmail: " + email + "\nUsername: " + username + "\nPassword: " + password + "\nPhone Number: "
-				+ phoneNumber + "\nAdditional Text: " + additionalText + "\nComments: " + comments + "\nNotes: "
-				+ Arrays.toString(notes.toArray(new String[]{})) + "\nFiles: "
+				+ phoneNumber + "\nAdditional Text: " + additionalText + "\nComments: " + comments + "\nFiles: "
 						+ Arrays.toString(files.toArray(new String[]{}));
 	
 	}

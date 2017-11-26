@@ -1,4 +1,4 @@
-package com.rehanjaved.database;
+package com.rehanjaved.data;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +13,10 @@ public class FileDatabase {
 
 	// Attributes
 	private static FileDatabase fileDatabase;
+	public static final String DATA_FOLDER = "data";
 	private final File wallet = new File("wallet.rj");
-	private ArrayList<DataMember> database;
+	private ArrayList<DataMember> database = null;
+	private DataMember password = null;
 	
 	/**
 	 * To Create only one instance.
@@ -101,6 +103,26 @@ public class FileDatabase {
 	}
 	
 	/**
+	 * @return password
+	 */
+	public DataMember getPassword() {
+	
+		return password;
+	
+	}
+
+	/**
+	 * Setting new value of password
+	 * 
+	 * @param password
+	 */
+	public void setPassword(DataMember password) {
+	
+		this.password = password;
+	
+	}
+
+	/**
 	 * To load database from the file.
 	 */
 	@SuppressWarnings("unchecked")
@@ -111,10 +133,15 @@ public class FileDatabase {
 			try {
 				wallet.createNewFile();
 			} catch (IOException e) {
-				System.out.println("File not exists, and error occured while creating database.");
+				System.out.println("$$$$: File not exists, and error occured while creating database.");
 				return;
 			}
 			
+		}
+		
+		File data = new File(DATA_FOLDER);
+		if(!data.exists()){
+			data.mkdir();
 		}
 		
 		try {
@@ -122,16 +149,27 @@ public class FileDatabase {
 			ObjectInputStream stream = new ObjectInputStream(new 
 					FileInputStream(wallet));
 		
+			this.password = (DataMember) stream.readObject();
 			this.database = (ArrayList<DataMember>) stream.readObject();
 			
 			stream.close();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("Database File not exists.");
+			System.out.println("$$$$: Database File not exists.");
 		} catch (IOException e) {
-			System.out.println("Error occured while reading data from file.");
+		
+			if(this.password == null){
+				this.password = new DataMember("admin", false);
+			}
+			
+			if(this.database == null){
+				this.database = new ArrayList<DataMember>();
+			}
+			
+			upload();
+			
 		} catch (ClassNotFoundException e) {
-			System.out.println("Trying to read wrong input from database.");
+			System.out.println("$$$$: Trying to read wrong input from database.");
 		}
 		
 	}
@@ -146,15 +184,16 @@ public class FileDatabase {
 			ObjectOutputStream stream = new ObjectOutputStream(new 
 					FileOutputStream(wallet));
 		
+			stream.writeObject(this.password);
 			stream.writeObject(this.database);
 			stream.flush();
 			
 			stream.close();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("Database File not exists.");
+			System.out.println("$$$$: Database File not exists.");
 		} catch (IOException e) {
-			System.out.println("Error occured while writing data to file.");
+			System.out.println("$$$$: Error occured while writing data to file.");
 		}
 		
 	}

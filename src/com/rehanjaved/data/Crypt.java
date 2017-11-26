@@ -1,10 +1,12 @@
-package com.rehanjaved.crypto;
+package com.rehanjaved.data;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Crypt {
+public class Crypt implements Serializable{
 
 	// Attributes
+	private static final long serialVersionUID = 1L;
 	private static Crypt crypt;
 	private Random random;
 
@@ -41,7 +43,7 @@ public class Crypt {
 	public String encrypt(String line){
 		
 		char[] array = (new StringBuilder(line)).reverse().toString().toCharArray();
-		char[] newArray = new char[array.length * 3];
+		char[] newArray = new char[array.length * 2];
 		int index = 0;
 		
 		for(int i = 0; i < array.length; i++){
@@ -51,7 +53,7 @@ public class Crypt {
 			
 		}
 		
-		return new String(newArray);
+		return String.valueOf(newArray);
 		
 	}
 	
@@ -73,7 +75,7 @@ public class Crypt {
 			
 		}
 		
-		return (new StringBuilder(new String(newArray))).reverse().toString();
+		return (new StringBuilder(String.valueOf(newArray))).reverse().toString();
 		
 	}
 
