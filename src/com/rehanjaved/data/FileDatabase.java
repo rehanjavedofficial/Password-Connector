@@ -8,7 +8,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import com.rehanjaved.member.Account;
+import com.rehanjaved.member.Category;
+
+/**
+ * @author Rehan Javed
+ * @Company RJ APPS
+ * @category Security
+ * @version 1.0.1
+ * @date 2nd December 2017
+ */
 public class FileDatabase {
 
 	// Attributes
@@ -16,6 +27,7 @@ public class FileDatabase {
 	public static final String DATA_FOLDER = "data";
 	private final File wallet = new File("wallet.rj");
 	private ArrayList<DataMember> database = null;
+	private int id = 0;
 	private DataMember password = null;
 	
 	/**
@@ -41,6 +53,14 @@ public class FileDatabase {
 	private FileDatabase(){
 		
 		loadDatabase();
+		
+	}
+	
+	public int getNewID(){
+		
+		this.id++;
+		upload();
+		return id;
 		
 	}
 	
@@ -85,7 +105,7 @@ public class FileDatabase {
 	 * @param member
 	 * @param id
 	 */
-	public void updateDataMember(DataMember member, int id){
+	public void updateDataMember(int id, DataMember member){
 		
 		this.database.set(id, member);
 		
@@ -123,6 +143,30 @@ public class FileDatabase {
 	}
 
 	/**
+	 * Getting data.
+	 * 
+	 * @param index
+	 * @return data
+	 */
+	public String getData(int index) {
+
+		if(index >= 0 && index < database.size())
+			return database.get(index).getDecryptedDate();
+		else 
+			return null;
+	
+	}
+	
+	/**
+	 * @return database
+	 */
+	public ArrayList<DataMember> getDatabase() {
+
+		return database;
+	
+	}
+
+	/**
 	 * To load database from the file.
 	 */
 	@SuppressWarnings("unchecked")
@@ -149,6 +193,7 @@ public class FileDatabase {
 			ObjectInputStream stream = new ObjectInputStream(new 
 					FileInputStream(wallet));
 		
+			this.id = Integer.parseInt(((DataMember) stream.readObject()).getDecryptedDate());
 			this.password = (DataMember) stream.readObject();
 			this.database = (ArrayList<DataMember>) stream.readObject();
 			
@@ -184,6 +229,7 @@ public class FileDatabase {
 			ObjectOutputStream stream = new ObjectOutputStream(new 
 					FileOutputStream(wallet));
 		
+			stream.writeObject(new DataMember(this.id+"", false));
 			stream.writeObject(this.password);
 			stream.writeObject(this.database);
 			stream.flush();
@@ -195,6 +241,46 @@ public class FileDatabase {
 		} catch (IOException e) {
 			System.out.println("$$$$: Error occured while writing data to file.");
 		}
+		
+	}
+	
+	public Account[] getParsedAccounts(){
+		
+		Account[] accounts = new Account[database.size()];
+		String[] data;
+		String tempCategory;
+		Category category;
+		ArrayList<String> files;
+		
+		for(int i = 0; i < accounts.length; i++){
+			
+			data = database.get(i).getDecryptedDate().split("\n");
+			tempCategory = data[3].substring(data[3].indexOf(':')+2);
+			
+			if(tempCategory.equals("SOCIAL")){
+				category = Category.SOCIAL;
+			}else if(tempCategory.equals("CRYPTOCURRENCY")){
+				category = Category.CRYPTOCURRENCY;
+			}else if(tempCategory.equals("OFFICIAL")){
+				category = Category.OFFICIAL;
+			}else if(tempCategory.equals("BUYING")){
+				category = Category.BUYING;
+			}else{
+				category = Category.OTHER;
+			}
+			
+			files = new ArrayList<String>(Arrays.asList(data[11].trim().substring(data[11].indexOf(':')+3, data[11].length() - 1)));
+			
+			accounts[i] = new Account(Integer.parseInt(data[0].substring(data[0].indexOf(':')+2)),
+					data[1].substring(data[1].indexOf(':')+2),data[2].substring(data[2].indexOf(':')+2),
+					category,data[4].substring(data[4].indexOf(':')+2),data[5].substring(data[5].indexOf(':')+2),
+					data[6].substring(data[6].indexOf(':')+2),data[7].substring(data[7].indexOf(':')+2),
+					data[8].substring(data[8].indexOf(':')+2),data[9].substring(data[9].indexOf(':')+2),
+					data[10].substring(data[10].indexOf(':')+2),files);
+			
+		}
+		
+		return accounts;
 		
 	}
 	

@@ -3,9 +3,17 @@ package com.rehanjaved.member;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Rehan Javed
+ * @Company RJ APPS
+ * @category Security
+ * @version 1.0.1
+ * @date 2nd December 2017
+ */
 public class Account{
 
 	// Attributes..
+	private int id;
 	private String title;
 	private String websiteName;
 	private Category category;
@@ -23,8 +31,9 @@ public class Account{
 	 * 
 	 * @param title
 	 */
-	public Account(String title) {
+	public Account(int id, String title) {
 	
+		this.id = id;
 		this.title = title;
 	
 	}
@@ -44,10 +53,11 @@ public class Account{
 	 * @param comments
 	 * @param files
 	 */
-	public Account(String title, String websiteName, Category category, String websiteLink, String email, String username,
+	public Account(int id, String title, String websiteName, Category category, String websiteLink, String email, String username,
 			String password, String phoneNumber, String additionalText, String comments,
 			ArrayList<String> files) {
 		
+		this.id = id;
 		this.title = title;
 		this.websiteName = websiteName;
 		this.category = category;
@@ -64,6 +74,25 @@ public class Account{
 		}else{
 			this.files = files;
 		}
+	
+	}
+
+	/**
+	 * @return id
+	 */
+	public int getId() {
+
+		return id;
+	
+	}
+
+	/**
+	 * Setting new value of id
+	 * @param id
+	 */
+	public void setId(int id) {
+	
+		this.id = id;
 	
 	}
 
@@ -282,7 +311,7 @@ public class Account{
 	@Override
 	public String toString() {
 		
-		return "Account >>\nTitle: "+title+"\nWebsite Name: " + websiteName + "\nCategory: " + category + "\nLink: " + websiteLink
+		return "ID: "+id+"\nTitle: "+title+"\nWebsite Name: " + websiteName + "\nCategory: " + category + "\nLink: " + websiteLink
 				+ "\nEmail: " + email + "\nUsername: " + username + "\nPassword: " + password + "\nPhone Number: "
 				+ phoneNumber + "\nAdditional Text: " + additionalText + "\nComments: " + comments + "\nFiles: "
 						+ Arrays.toString(files.toArray(new String[]{}));

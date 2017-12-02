@@ -2,6 +2,13 @@ package com.rehanjaved.data;
 
 import java.io.Serializable;
 
+/**
+ * @author Rehan Javed
+ * @Company RJ APPS
+ * @category Security
+ * @version 1.0.1
+ * @date 2nd December 2017
+ */
 public class DataMember implements Serializable{
 
 	// Attributes
